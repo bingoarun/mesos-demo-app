@@ -1,15 +1,14 @@
 from apscheduler.scheduler import Scheduler
 from flask import Flask
-import click
 
 app = Flask(__name__)
 count = 0
 sched = Scheduler()
 sched.start()
 #Time out to reset count (in seconds)
-time_limit=0
+time_limit=20
 #Number of accepted connections in time_limit
-max_connections=0
+max_connections=5
 
 def clearCount():
     global count
@@ -18,18 +17,11 @@ def clearCount():
 
 sched.add_interval_job(clearCount, seconds = time_limit)
 
-@click.command()
-@click.option('--time', default=20, help='Time out to reset count (in seconds)')
-@click.option('--max', default=5, help='Number of accepted connections in the specified time')
-def initializeVar(time,max):
-    global time_limit
-    global max_connections
-    time_limit,max_connections=time,max
-
 
 @app.route('/')
 def hello_world():
     global count
+    print "count", count
     count = count+1
     if count<=max_connections:
         return 'Hello World! %d' % count
@@ -37,5 +29,4 @@ def hello_world():
         return 'Too much load :P '
 
 if __name__ == '__main__':
-    initializeVar()
     app.run(host='0.0.0.0',port='1234')
