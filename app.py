@@ -24,9 +24,9 @@ def hello_world():
     print "count", count
     count = count+1
     if count<=max_connections:
-        return 'Hello World! %d' % count
+        return 'Success ===========================>  %d' % count
     else:
-        return 'Too much load :P '
+        return 'ERROR: Too much load  '
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port='1234')
